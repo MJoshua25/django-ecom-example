@@ -35,10 +35,10 @@ jobs:
         --exclude='.idea/' \ 
         --delete-excluded \
         --exclude='__pycache__/' \
-        -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" \
+        -e "ssh -o StrictHostKeyChecking=no \
         . root@${SERVER_IP}:/github/ecom/
 
     - name: Build Docker Containers
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${SERVER_IP} \
+        ssh -o StrictHostKeyChecking=no root@${SERVER_IP} \
         "cd /github/ecom && docker compose up --build -d"
