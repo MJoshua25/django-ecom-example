@@ -20,11 +20,12 @@ jobs:
           exit 1
         fi
 
-    - uses: actions/checkout@v2
     - name: Set up SSH Key
-      uses: shimat/setup-ssh-action@v1.0.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
     - name: Deploy Code
       run: |
