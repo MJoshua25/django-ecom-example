@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Check commit message
       if: contains(github.event.head_commit.message, 'deploy')
-      run: echo "Deploying to server..."
+      run: echo ls
 
     - name: Set up SSH Key
       run: |
