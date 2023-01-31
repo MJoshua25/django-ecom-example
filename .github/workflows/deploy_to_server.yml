@@ -32,7 +32,7 @@ jobs:
         --delete-excluded \
         --exclude='__pycache__/' \
         -e "ssh -o StrictHostKeyChecking=no \
-        ${{ env.GITHUB_WORKSPACE }} root@${SERVER_IP}:/github/ecom/
+        ${{ env.GITHUB_WORKSPACE }}/ root@${SERVER_IP}:/github/ecom/
 
     - name: Build Docker Containers
       run: |
