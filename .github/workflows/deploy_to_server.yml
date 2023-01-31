@@ -1,0 +1,43 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [main]
+
+env:
+  SERVER_IP: 178.79.191.208
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check commit message
+      run: |
+        COMMIT_MESSAGE=$(git log --format=%B -n 1 $GITHUB_SHA)
+        if ! echo "$COMMIT_MESSAGE" | grep -q "deploy"; then
+          echo "Commit message does not contain 'deploy', skipping deployment"
+          exit 1
+        fi
+
+    - uses: actions/checkout@v2
+    - name: Set up SSH Key
+      uses: shimat/setup-ssh-action@v1.0.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy Code
+      run: |
+        rsync -ahipvz --delete \
+        --exclude='.git/' \
+        --exclude='*.pyc' \
+        --exclude='.idea/' \ 
+        --delete-excluded \
+        --exclude='__pycache__/' \
+        -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa" \
+        . root@${SERVER_IP}:/github/ecom/
+
+    - name: Build Docker Containers
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${SERVER_IP} \
+        "cd /github/ecom && docker compose up --build -d"
