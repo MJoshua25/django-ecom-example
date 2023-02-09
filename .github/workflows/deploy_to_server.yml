@@ -25,14 +25,7 @@ jobs:
 
     - name: Deploy Code
       run: |
-        rsync -ahipvz --delete \
-        --exclude='.git/' \
-        --exclude='*.pyc' \
-        --exclude='.idea/' \ 
-        --delete-excluded \
-        --exclude='__pycache__/' \
-        -e \
-        ./ root@${SERVER_IP}:/github/ecom/
+        rsync -ahipvz --delete ./ root@${SERVER_IP}:/github/ecom/
 
     - name: Build Docker Containers
       run: |
