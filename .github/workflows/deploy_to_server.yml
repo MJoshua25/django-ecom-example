@@ -31,7 +31,7 @@ jobs:
         --exclude='.idea/' \ 
         --delete-excluded \
         --exclude='__pycache__/' \
-        -e "ssh -o StrictHostKeyChecking=no \
+        -e \
         ./ root@${SERVER_IP}:/github/ecom/
 
     - name: Build Docker Containers
